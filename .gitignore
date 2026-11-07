@@ -1,0 +1,34 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# tests
+/coverage
+
+# next.js
+/.next/
+/out/
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# logs
+npm-debug.log*
+.pnpm-debug.log*
+
+# env files: never in the repo (only .env.example, with names and no values)
+.env*
+!.env.example
+
+# vercel / render
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# internal notes (private): bitácora, rules copy, submission drafts
+.interno/

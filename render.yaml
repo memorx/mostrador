@@ -1,0 +1,39 @@
+# Render Blueprint: one Node web service running `next build` + `next start`.
+# Sessions live in memory, so this must be a single long-lived instance
+# (a web service, not serverless). See "Deploy on Render" in README.md.
+services:
+  - type: web
+    name: mostrador
+    runtime: node
+    # free sleeps after 15 min without traffic (about a minute to wake up, and
+    # in-memory chats reset). A paid instance type such as 0.5c-512mb stays awake.
+    plan: free
+    region: oregon
+    # pnpm comes from the "packageManager" field in package.json through Corepack.
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    # next start listens on $PORT (Render sets it) and on 0.0.0.0 by default.
+    startCommand: node_modules/.bin/next start
+    healthCheckPath: /
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "22.20.0"
+      - key: COREPACK_ENABLE_DOWNLOAD_PROMPT
+        value: "0"
+      # Secrets: Render asks for them when the Blueprint is created. Never commit them.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PAYPAL_CLIENT_ID # sandbox app
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET # sandbox app
+        sync: false
+      - key: CLAUDE_MODEL
+        value: claude-opus-5-5
+      - key: CLAUDE_EFFORT
+        value: low
+      # Safety cap for the public demo: Claude calls per server process per UTC day.
+      - key: DEMO_MAX_CLAUDE_CALLS_PER_DAY
+        value: "300"
+      # APP_BASE_URL is not needed here: PayPal's return URL uses RENDER_EXTERNAL_URL,
+      # which Render sets for every web service. Add it only for a custom domain.
+      # Do not set NODE_ENV=production: the build needs the dev dependencies.
