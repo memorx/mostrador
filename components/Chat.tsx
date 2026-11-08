@@ -124,7 +124,7 @@ function FeedItemView({ f, cur, quote, payment, orderNumber, busy, onConfirm, st
 }) {
   switch (f.kind) {
     case "customer": return <div className="msg me">{f.text}</div>;
-    case "agent": return <div className="msg bot">{f.text}</div>;
+    case "agent": return <div className="msg bot">{plain(f.text)}</div>;
     case "notice": return <p className={`notice ${f.tone === "warn" ? "warn" : ""}`}>{f.text}</p>;
     case "cart": {
       const p = f.priced;
@@ -181,4 +181,9 @@ function FeedItemView({ f, cur, quote, payment, orderNumber, busy, onConfirm, st
       );
     }
   }
+}
+
+// The prompt asks for plain text; strip any Markdown bold the model still sends.
+function plain(text: string): string {
+  return text.replace(/\*\*(.+?)\*\*/g, "$1");
 }

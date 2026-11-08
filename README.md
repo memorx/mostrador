@@ -10,7 +10,7 @@ The demo shop, *Café Tres Campanas* in Morelia, is **fictional**.
 
 - **Live demo:** `<DEMO_URL>`. No sign-up. If nobody used it for a while, the first load can take about a minute while the server wakes up.
 - **Payments are PayPal sandbox.** No real money moves. To approve a payment, log in on the PayPal page with this sandbox buyer account:
-  - email: `<SANDBOX_BUYER_EMAIL>`
+  - email: `sb-43bydl53775381@personal.example.com`
   - password: `<SANDBOX_BUYER_PASSWORD>`
 - If the server runs without PayPal keys, a page clearly labeled **Payment simulator** takes PayPal's place, so the flow still runs end to end.
 
