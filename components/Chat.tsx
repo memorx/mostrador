@@ -36,10 +36,16 @@ export default function Chat() {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lostCheckout, setLostCheckout] = useState(false);
   const feedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let alive = true;
+    // Back from PayPal without a session: the server restarted (sessions live in memory) and nothing was captured.
+    try {
+      const q = new URLSearchParams(window.location.search);
+      setLostCheckout(q.get("payment") === "error" && !q.get("s"));
+    } catch {}
     void openSession().then((s) => { if (alive) setSnap(s); });
     return () => { alive = false; };
   }, []);
@@ -85,6 +91,7 @@ export default function Chat() {
         </header>
 
         <div className="feed" ref={feedRef} aria-live="polite">
+          {lostCheckout && <p className="notice warn">That PayPal checkout couldn&apos;t be completed and nothing was charged: the demo server restarted while you were in PayPal. Please place the order again.</p>}
           {snap.feed.length === 0 && <p className="note">Order like you would on WhatsApp: tell the assistant what you want. It builds the order, the shop computes the prices, and you pay with PayPal right here.</p>}
           {collapseCartCards(snap.feed).map((f) => <FeedItemView key={f.id} f={f} cur={cur} quote={quote} payment={payment} orderNumber={snap.orderNumber} busy={busy} onConfirm={confirm} stage={snap.stage} />)}
           {busy && <p className="typing">The assistant is typing…</p>}

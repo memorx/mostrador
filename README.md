@@ -8,7 +8,8 @@ The demo shop, *Café Tres Campanas* in Morelia, is **fictional**.
 
 ## Try it
 
-- **Live demo:** `<DEMO_URL>`. No sign-up. If nobody used it for a while, the first load can take about a minute while the server wakes up.
+- **Demo video (2 min):** https://youtu.be/f68AIlygx4g
+- **Live demo:** https://mostrador-qxvl.onrender.com. No sign-up. If nobody used it for a while, the first load can take about a minute while the server wakes up.
 - **Payments are PayPal sandbox.** No real money moves. To approve a payment, log in on the PayPal page with this sandbox buyer account:
   - email: `sb-43bydl53775381@personal.example.com`
   - password: `<SANDBOX_BUYER_PASSWORD>`

@@ -1,0 +1,13 @@
+# Render's free plan sleeps after 15 minutes without traffic, and sessions live in memory,
+# so a judge who takes a while in PayPal would come back to an empty chat. Ping it every 10 minutes.
+name: Keep the live demo awake
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - run: curl -fsS -m 90 -o /dev/null https://mostrador-qxvl.onrender.com/ || true
