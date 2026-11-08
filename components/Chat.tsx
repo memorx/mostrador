@@ -36,16 +36,17 @@ export default function Chat() {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [lostCheckout, setLostCheckout] = useState(false);
+  // Back from PayPal without a session: the server restarted (sessions live in memory) and nothing was captured.
+  // Only read on the client; the first render shows "Opening the shop…" either way, so hydration matches.
+  const [lostCheckout] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const q = new URLSearchParams(window.location.search);
+    return q.get("payment") === "error" && !q.get("s");
+  });
   const feedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let alive = true;
-    // Back from PayPal without a session: the server restarted (sessions live in memory) and nothing was captured.
-    try {
-      const q = new URLSearchParams(window.location.search);
-      setLostCheckout(q.get("payment") === "error" && !q.get("s"));
-    } catch {}
     void openSession().then((s) => { if (alive) setSnap(s); });
     return () => { alive = false; };
   }, []);
